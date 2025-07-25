@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Reviews</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="handlePageLoad()">
+  <div id="auth-section" class="signup-container" style="display: none;">
+    <h1 class="signup-heading">Welcome</h1>
+    <form onsubmit="event.preventDefault();">
+      <button type="button" onclick="window.location.href='login.html'">Login</button>
+      <button type="button" onclick="window.location.href='signup.html'">Sign Up</button>
+    </form>
+  </div>
+
+  <div id="review-section" class="signup-container" style="display: none;">
+    <h1 class="signup-heading">Submit Review</h1>
+    <form onsubmit="event.preventDefault(); submitReview();">
+      <input type="hidden" id="userId" />
+
+      <label for="productId">Select Product:</label>
+      <select id="productId"></select>
+
+      <label for="rating">Rating (1-5):</label>
+      <input type="number" id="rating" min="1" max="5" placeholder="Enter your rating" />
+
+      <label for="reviewText">Review:</label>
+      <textarea id="reviewText" rows="4" cols="50" placeholder="Write your review here..."></textarea>
+
+      <button type="submit">Submit</button>
+      <button type="button" onclick="logout()">Logout</button>
+    </form>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="signup-container">
+    <h1 class="signup-heading">Login</h1>
+    <form onsubmit="event.preventDefault(); login();">
+      <label for="loginEmail">Email:</label>
+      <input type="email" id="loginEmail" placeholder="Enter your email" required />
+
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" placeholder="Enter your password" required />
+
+      <button type="submit">Login</button>
+    </form>
+    <p class="signup-bottom">Don't have an account? <a href="signup.html">Sign up here</a></p>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    async function login() {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      if (email.trim().toLowerCase() === "admin@admin.com") {
+        const res = await fetch("http://localhost:5000/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem("adminToken", data.token);
+          window.location.href = "admin.html";
+          return;
+        } else {
+          alert("Admin login failed");
+          return;
+        }
+      }
+      try {
+        const res = await fetch("http://localhost:5000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+        if (!res.ok) {
+          const err = await res.text();
+          alert("Login failed: " + err);
+          return;
+        }
+        const data = await res.json();
+        if (data.user && data.user.id) {
+          localStorage.setItem("userId", data.user.id);
+          localStorage.setItem("token", data.token);
+          if (typeof showPopup === 'function') showPopup("Login successful");
+          setTimeout(() => { location.href = "index.html"; }, 1800);
+        } else {
+          alert("Login failed: Invalid response structure");
+        }
+      } catch (err) {
+        console.error("Login error:", err);
+        alert("Error logging in");
+      }
+    }
+  </script>
+</body>
+</html>
